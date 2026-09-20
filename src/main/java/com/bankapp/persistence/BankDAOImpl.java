@@ -12,13 +12,13 @@ import com.bankapp.domain.*;
 public class BankDAOImpl implements BankDAO {
 
     //     CREATE TABLE account (
-    //     account_id SERIAL PRIMARY KEY,
+    //     account_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     //     pin VARCHAR(255) NOT NULL,
     //     balance NUMERIC(12, 2) NOT NULL DEFAULT 0.00
     //     );
 
     // CREATE TABLE transaction (
-    //     transaction_id SERIAL PRIMARY KEY,
+    //     transaction_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     //     account_id INTEGER NOT NULL REFERENCES account(account_id),
     //     type VARCHAR(20) NOT NULL,
     //     amount NUMERIC(12, 2) NOT NULL,
@@ -27,7 +27,7 @@ public class BankDAOImpl implements BankDAO {
     //     );
     
     private static final String INSERT_ACCOUNT_SQL = "INSERT INTO account (pin, balance) VALUES (?, ?) RETURNING account_id";
-    private static final String INSERT_TRANSACTION_SQL = "INSERT INTO transaction (id, name, major, gpa) VALUES (?, ?, ?, ?)";
+    private static final String INSERT_TRANSACTION_SQL = "INSERT INTO transaction (account_id, type, amount, related_account_id) VALUES (?, ?, ?, ?)";
     private static final String SELECT_ACCOUNT_SQL = "SELECT account_id, pin, balance FROM account WHERE account_id = ? RETURNING account_id, pin, balance";
     private static final String SELECT_TRASACTION_SQL = "SELECT id, name, major, gpa FROM transaction ORDER BY id";
     private static final String UPDATE_BALANCE_SQL = "UPDATE account SET balance = ? WHERE id = ?";
@@ -42,7 +42,7 @@ public class BankDAOImpl implements BankDAO {
                 statement.setInt(1, pin);
                 statement.setInt(2, 0);
                 res = statement.executeQuery();
-                while(res.next()){
+                if(res.next()){
                     return res.getInt("account_id");
                 }
                 
@@ -57,8 +57,8 @@ public class BankDAOImpl implements BankDAO {
                 PreparedStatement statement = connection.prepareStatement(SELECT_ACCOUNT_SQL)) {
                 statement.setInt(1, id);
                 ResultSet rs = statement.executeQuery();
-                while(rs.next()){
-                    return rs.getInt("pin");
+                if(rs.next()){
+                    return rs.getInt("balance");
                 }
             } catch (SQLException e) {
                 throw databaseError("Error retrieving balance", e);
@@ -72,13 +72,12 @@ public class BankDAOImpl implements BankDAO {
                 PreparedStatement statement = connection.prepareStatement(UPDATE_BALANCE_SQL)) {
                 statement.setInt(1, amount);
                 statement.executeQuery();
+                return 1;
                 
             } catch (SQLException e) {
                 throw databaseError("Error retrieving balance", e);
             }
             
-
-            return -1;
 
         }
 
@@ -161,6 +160,27 @@ public class BankDAOImpl implements BankDAO {
                 throw databaseError("Error retrieving account id", e);
             }
             return -1;
+        }
+
+        public int addTransaction(int id, int amount, String type, int relId) {
+
+            //(account_id, type, amount, related_account_id)
+            try (Connection connection = ConnectionFactory.getConnectionFactory().getConnection();
+                PreparedStatement statement = connection.prepareStatement(INSERT_TRANSACTION_SQL)) {
+                statement.setInt(1, id);
+                statement.setString(2, type);
+                statement.setInt(3, amount);
+                statement.setInt(4, relId);
+                ResultSet rs = statement.executeQuery();
+                while(rs.next()){
+                    return rs.getInt("account_id");
+                }
+            } catch (SQLException e) {
+                throw databaseError("Error retrieving account id", e);
+            }
+
+            return -1;
+
         }
 
         private IllegalStateException databaseError(String message, SQLException cause) {

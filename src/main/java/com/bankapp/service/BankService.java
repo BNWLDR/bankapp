@@ -9,6 +9,7 @@ public interface BankService {
     void transfer(String[] s);
     void history(int id);
     int login(int[] res);
+    //boolean addTransaction(id, type, amount, relId);
 
     
 }

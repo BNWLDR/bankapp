@@ -16,5 +16,7 @@ public interface BankDAO {
     int[] login(int id, int pin);
 
     int getAccountId(int id);
+
+    int addTransaction(int id, int amount, String type, int relId);
     
 }
