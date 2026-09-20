@@ -22,7 +22,7 @@ public class BankRepl {
 
             if (command.equals("exit")) {
                 if (id != 0) {
-                    service.logout(id); //doesn't update session id as this ends the program
+                    id = 0; //doesn't update session id as this ends the program
                 }
                 return;
             }
@@ -41,7 +41,7 @@ public class BankRepl {
     private void handle(String command) {
         if (id != 0) { //check if user is logged in
             switch (command) {
-                case "logout" -> id = service.logout(id); //Updates id -> 0 when logging out, but doesn't exit
+                case "logout" -> id = 0; //Updates id -> 0 when logging out, but doesn't exit
                 case "balance" -> service.getBalance(id);
                 case "withdraw" -> service.updateBalance(readTransaction("withdraw"));
                 case "deposit" -> service.updateBalance(readTransaction("deposit"));
@@ -57,7 +57,7 @@ public class BankRepl {
                 //calls reader method and passes it to service layer to check 
                 
                 case "login" -> id = service.login(readLogin()); //updates session information to show user is logged in under id
-                case "register" -> service.register(readLogin());
+                case "register" -> service.createAccount(readRegistration());
                 case "list" -> System.out.print("");
                 default -> System.out.println("Sorry, that is not a valid command.");
 
@@ -94,13 +94,11 @@ public class BankRepl {
         return res;
     }
 
-    private int[] readAccount(int id) {
-        int[] res = new int[2];
-        res[0] = id;
-        System.out.print("Amount to deposit: ");
-        res[1] = scanner.nextInt();
+    private int readRegistration() {
+        int res = 0;
+        System.out.print("Enter a PIN for your new account: ");
+        res = scanner.nextInt();
         
-
         return res;
 
     }

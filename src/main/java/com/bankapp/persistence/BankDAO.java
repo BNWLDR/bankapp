@@ -1,26 +1,20 @@
 package com.bankapp.persistence;
+import com.bankapp.domain.*;
 
 public interface BankDAO {
-    boolean logout(int id);
 
-    boolean addAccount(int id, int pin);
+    int addAccount(int pin);
 
-    void getBalance(int id);
+    int getBalance(int id);
 
-    void updateBalance(String id, String type, String amount);
+    int updateBalance(int id, int amount);
 
-    void transfer(String id, String type, String amount, String relId);
+    boolean transfer(int id, int balance, int relId, int relBalance);
 
-    void history(int id);
+    Transaction[] history(int id);
 
-    boolean login(int id, int pin);
+    int[] login(int id, int pin);
 
-    boolean register(int id, int pin);
-
-    boolean verifyId(int id);
-
-    boolean verifyBalance(int amount);
-
-    boolean verifyPIN(int pin);
+    int getAccountId(int id);
     
 }
