@@ -1,14 +1,16 @@
 package com.bankapp.domain;
 
+import java.math.BigDecimal;
+
 public class Transaction {
     int transactionID;
     int accountID;
     String transactionType;
-    int amount;
+    BigDecimal amount;
     int relatedID;
     String timestamp;
 
-    public Transaction(int transactionID, int accountID, String transactionType, int amount, int relatedID, String timestamp) {
+    public Transaction(int transactionID, int accountID, String transactionType, BigDecimal amount, int relatedID, String timestamp) {
         this.transactionID = transactionID;
         this.accountID = accountID;
         this.transactionType = transactionType;
