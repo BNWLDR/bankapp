@@ -1,12 +1,14 @@
 package com.bankapp.domain;
 
+import java.math.BigDecimal;
+
 public class Account {
     private int id;
-    private int pin;
-    private int balance;
+    private String pin;
+    private BigDecimal balance;
 
 
-    public Account(int id, int pin, int balance) {
+    public Account(int id, String pin, BigDecimal balance) {
         this.balance = balance;
         this.id = id;
         this.pin = pin;
@@ -14,23 +16,20 @@ public class Account {
 
     @Override
     public String toString() {
-        return String.format( "Account ID: %d | Balance: %d", id, balance );
+        return String.format( "Account ID: %d | Balance: %.2f", id, balance );
     }
 
     public int getId() {
         return id;
     }
 
-    public int getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    boolean validatePIN(int pin) {
+    public boolean validatePIN(String pin) {
         //verify pin matches for login
-        if(this.pin == pin) {
-            return true;
-        }
-        return false;
+        return this.pin.equals(pin);
     }
     
 }

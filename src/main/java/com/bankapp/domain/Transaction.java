@@ -19,7 +19,7 @@ public class Transaction {
 
     @Override 
     public String toString() { //toString prints account information
-        return String.format("Transaction toString() not implemented yet.");
+        return transactionType + ": " + amount + " | Account: " + accountID + " | Related: " + relatedID + " | " + timestamp;
     }
 
     

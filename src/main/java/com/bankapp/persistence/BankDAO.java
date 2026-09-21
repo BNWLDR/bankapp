@@ -1,22 +1,22 @@
 package com.bankapp.persistence;
+import java.math.BigDecimal;
+
 import com.bankapp.domain.*;
 
 public interface BankDAO {
 
-    int addAccount(int pin);
+    int addAccount(String pin);
 
-    int getBalance(int id);
+    BigDecimal deposit(int id, BigDecimal amount);
 
-    int updateBalance(int id, int amount);
+    BigDecimal withdraw(int id, BigDecimal amount);
 
-    boolean transfer(int id, int balance, int relId, int relBalance);
+    boolean transfer(int id, int relId, BigDecimal amount);
 
     Transaction[] history(int id);
 
-    int[] login(int id, int pin);
+    Account findAccount(int id);
 
-    int getAccountId(int id);
-
-    int addTransaction(int id, int amount, String type, int relId);
+    
     
 }
