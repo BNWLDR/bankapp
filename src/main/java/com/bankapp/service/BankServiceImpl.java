@@ -29,7 +29,7 @@ public class BankServiceImpl implements BankService{
 
         int id = bankDAO.addAccount(pin);
 
-        if (id <= 0) {
+        if (id > 0) {
             logger.info("Account {} created", id);
             System.out.println("Account created successfully! Your account ID is: " + id);
         }
